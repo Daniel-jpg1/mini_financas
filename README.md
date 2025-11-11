@@ -43,3 +43,10 @@ O projeto se relaciona ao ODS **“Trabalho decente e crescimento econômico”*
 
 ## 📦 Estrutura
 
+```
+mini-financas/
+│
+├── backend/ → servidor Node + Express
+├── frontend/ → interface React
+└── README.md → documentação do projeto
+```
