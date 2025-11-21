@@ -40,6 +40,7 @@ O objetivo do projeto é oferecer uma solução simples e funcional para gerenci
 
 ## 📦 Estrutura
 
+```
 mini-financas/
 │
 ├── backend/               → servidor Node + Express
@@ -48,3 +49,5 @@ mini-financas/
 ├── frontend/              → interface React
 │
 └── README.md              → documentação
+```
+
