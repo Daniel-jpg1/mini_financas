@@ -1,17 +1,21 @@
-# 💰 Mini Finanças — Projeto PEX
+# 💰 Mini Finanças
 
-Aplicação **Full Stack** de controle financeiro pessoal desenvolvida para o projeto **PEX (Projeto de Extensão Universitária)**, com foco em **cadastro de clientes**, **controle de cobranças** e **login de usuários**.
+Aplicação Full Stack de controle financeiro pessoal, com foco em cadastro de usuários, registro de entradas e saídas, e organização financeira básica.
 
-O objetivo do projeto é oferecer uma solução simples e funcional para o gerenciamento financeiro, utilizando tecnologias modernas de desenvolvimento web.
+O objetivo do projeto é oferecer uma solução simples e funcional para gerenciamento de finanças pessoais.
 
 ---
 
 ## 🚀 Tecnologias Utilizadas
 
+### 🔹 Database
+- MySQL 
+
+
 ### 🔹 Back-end
 - Node.js  
-- Express  
-- MongoDB (via Mongoose)  
+- Express    
+- Sequelize  
 - Dotenv  
 - Cors  
 
@@ -26,27 +30,21 @@ O objetivo do projeto é oferecer uma solução simples e funcional para o geren
 
 ---
 
-## 🎯 Objetivo Social (ODS)
-
-O projeto se relaciona ao ODS **“Trabalho decente e crescimento econômico”**, ao incentivar **educação financeira** e o **uso responsável de recursos** pessoais e empresariais.
-
----
-
 ## 🧩 Funcionalidades Principais
 
 - Cadastro e autenticação de usuários  
-- Cadastro e listagem de clientes  
-- Registro e controle de cobranças  
-- Atualização de status (pago / pendente)  
+- Registro e listagem de transações (entradas e saídas)  
+- Organização e controle financeiro pessoal  
 
 ---
 
 ## 📦 Estrutura
 
-```
 mini-financas/
 │
 ├── backend/ → servidor Node + Express
+│ └── database/ → scripts, conexão e estrutura do MySQL
+│
 ├── frontend/ → interface React
-└── README.md → documentação do projeto
-```
+│
+└── README.md
