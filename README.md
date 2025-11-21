@@ -42,9 +42,9 @@ O objetivo do projeto é oferecer uma solução simples e funcional para gerenci
 
 mini-financas/
 │
-├── backend/ → servidor Node + Express
-│ └── database/ → scripts, conexão e estrutura do MySQL
+├── backend/               → servidor Node + Express
+│   └── database/          → scripts, conexão e estrutura do MySQL
 │
-├── frontend/ → interface React
+├── frontend/              → interface React
 │
-└── README.md
+└── README.md              → documentação
