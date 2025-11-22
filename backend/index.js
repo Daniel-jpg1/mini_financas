@@ -1,4 +1,3 @@
-// index.js
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -12,7 +11,6 @@ require("./models/index");
 
 const app = express();
 
-// Middlewares
 app.use(cors());
 app.use(express.json());
 
@@ -21,15 +19,12 @@ app.get("/", (req, res) => {
   res.send("Servidor está funcionando! 🚀");
 });
 
-// Porta
 const PORT = process.env.PORT || 3000;
 
-// Testa conexão com MySQL → sincroniza tabelas → inicia o servidor
 sequelize.authenticate()
   .then(() => {
     console.log("Conexão com o MySQL estabelecida com sucesso!");
 
-    // 🔥 CRIA/SINCRONIZA AS TABELAS
     return sequelize.sync({ alter: true });
   })
   .then(() => {
