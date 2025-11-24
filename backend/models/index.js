@@ -1,10 +1,10 @@
-const User = require("./Users");
-const Category = require("./Categories");
-const Transaction = require("./Transactions");
-const Installment = require("./Installments");
-const History = require("./Historys");
-const Account = require("./Accounts");
-const Debt = require("./Debts");
+const User = require("./User");
+const Category = require("./Category");
+const Transaction = require("./Transaction");
+const Installment = require("./Installment");
+const History = require("./History");
+const Account = require("./Account");
+const Debt = require("./Debt");
 
 //Account FK -------------------------------------------------------------
 
@@ -18,10 +18,6 @@ User.hasMany(Account, { foreignKey: "user_id" });
 Category.belongsTo(User, { foreignKey: "user_id" });
 User.hasMany(Category, { foreignKey: "user_id" });
 
-// Category → Account
-Category.belongsTo(Account, { foreignKey: "account_id" });
-Account.hasMany(Category, { foreignKey: "account_id" });
-
 //Debt FK -----------------------------------------------------------------
 
 // Debt → User
@@ -34,7 +30,15 @@ Account.hasMany(Debt, { foreignKey: "account_id" });
 
 //History FK --------------------------------------------------------------
 
+// History → User
+
 History.belongsTo(User, { foreignKey: "user_id" });
+User.hasMany(History, { foreignKey: "user_id" });
+
+// History → Account
+
+History.belongsTo(Account, { foreignKey: "account_id" });
+Account.hasMany(History, { foreignKey: "account_id" });
 
 //Installment FK ----------------------------------------------------------
 
@@ -59,6 +63,11 @@ Account.hasMany(Transaction, { foreignKey: "account_id" });
 // Transaction → Category
 Transaction.belongsTo(Category, { foreignKey: "category_id" });
 Category.hasMany(Transaction, { foreignKey: "category_id" });
+
+// Transaction → Installment
+Transaction.belongsTo(Installment, { foreignKey: "installment_id" });
+Installment.hasMany(Transaction, { foreignKey: "installment_id" });
+
 
 module.exports = {
   User,

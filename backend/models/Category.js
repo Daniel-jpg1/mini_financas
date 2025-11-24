@@ -15,10 +15,6 @@ const Category = sequelize.define("Category", {
     type: DataTypes.STRING,
     allowNull: false
   },
-    account_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
    description: {
     type: DataTypes.TEXT
   }

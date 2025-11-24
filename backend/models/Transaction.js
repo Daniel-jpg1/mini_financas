@@ -10,27 +10,38 @@ const Transaction = sequelize.define("Transaction", {
   user_id: {
     type: DataTypes.INTEGER,
     allowNull: false
-},
+  },
   account_id: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-    type: {
+  type: {
     type: DataTypes.ENUM("Pix", "Credito", "Dinheiro", "Debito"),
     allowNull: false
   },
-    category_id: {
+  direction: {
+    type: DataTypes.ENUM("Receber", "Pagar"),
+    allowNull: false
+  },
+  category_id: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-    amount: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false
+  installment_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true
   },
-    description: {
+  amount: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+    validate: { 
+      min: 0.01 
+    }
+  },
+  description: {
     type: DataTypes.TEXT
   },
-    transaction_date: {
+  transaction_date: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   }
