@@ -24,15 +24,17 @@ const Debt = sequelize.define("Debt", {
     allowNull: false
   },
     total_amount: {
-    type: DataTypes.DECIMAL (10, 2),
-    allowNull: false
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+    validate: { 
+      min: 0.01
+     }
   },
     due_date: {
     type: DataTypes.DATEONLY
   },
     number_installments: {
     type: DataTypes.INTEGER,
-    allowNull: false
   },
    description: {
     type: DataTypes.TEXT

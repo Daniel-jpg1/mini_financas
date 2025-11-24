@@ -11,7 +11,7 @@ const History = sequelize.define("History", {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-   account_id: {
+  account_id: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
@@ -19,17 +19,26 @@ const History = sequelize.define("History", {
     type: DataTypes.DATEONLY,
     allowNull: false
   },
-    total_income: {
-    type: DataTypes.DECIMAL (10, 2),
-    defaultValue: 0
+  total_income: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0,
+    validate: { 
+      min: 0 
+    }
   },
-    total_expense: {
-    type: DataTypes.DECIMAL (10, 2),
-    defaultValue: 0
+  total_expense: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0,
+    validate: { 
+      min: 0 
+    }
   },
-    balance: {
-    type: DataTypes.DECIMAL (10, 2),
-    defaultValue: 0
+  balance: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0,
+    validate: { 
+      min: 0 
+    }
   }
 });
 

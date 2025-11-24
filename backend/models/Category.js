@@ -11,13 +11,21 @@ const Category = sequelize.define("Category", {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-   name: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false
   },
-   description: {
+  description: {
     type: DataTypes.TEXT
   }
+}, {
+  indexes: [
+    {
+      unique: true,
+      fields: ["user_id", "name"],
+      name: "category_user_unique"
+    }
+  ]
 });
 
 module.exports = Category;
