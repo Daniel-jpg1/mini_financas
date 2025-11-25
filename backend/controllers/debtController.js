@@ -1,5 +1,3 @@
-// controllers/debtController.js
-
 const debtService = require('../services/debtService');
 
 module.exports = {

@@ -1,7 +1,3 @@
-// controllers/authController.js
-// Responsável por login e registro
-// Não contém lógica pesada — só chama o service
-
 const authService = require('../services/authService');
 
 module.exports = {

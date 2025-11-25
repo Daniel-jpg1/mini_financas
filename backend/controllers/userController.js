@@ -1,6 +1,3 @@
-// controllers/userController.js
-// Apenas para pegar o perfil do usuário logado
-
 const userService = require('../services/userService');
 
 module.exports = {
