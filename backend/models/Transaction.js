@@ -25,7 +25,7 @@ const Transaction = sequelize.define("Transaction", {
   },
   category_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true
   },
   installment_id: {
     type: DataTypes.INTEGER,

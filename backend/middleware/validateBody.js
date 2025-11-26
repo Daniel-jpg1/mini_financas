@@ -1,4 +1,4 @@
-module.exports = function validateBody(schema) {
+function validateBody(schema) {
   return (req, res, next) => {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
@@ -11,4 +11,6 @@ module.exports = function validateBody(schema) {
 
     next();
   };
-};
+}
+
+module.exports = { validateBody };

@@ -43,11 +43,21 @@ O objetivo do projeto é oferecer uma solução simples e funcional para gerenci
 ```
 mini-financas/
 │
-├── backend/               → servidor Node + Express
-│   └── database/          → scripts, conexão e estrutura do MySQL
+├── backend/
+│ ├── controllers/ → lógica das rotas
+│ ├── services/ → regras de negócio
+│ ├── models/ → tabelas e associações (Sequelize)
+│ ├── routes/ → definição das rotas da API
+│ ├── middleware/ → autenticação, validação e tratamento de erros
+│ ├── validators/ → schemas de validação 
+│ ├── database/ → conexão MySQL
+│ ├── server.js → inicialização do servidor
+│ └── .env → variáveis de ambiente
 │
-├── frontend/              → interface React
+├── frontend/
+│ ├── src/ → componentes React e páginas
+│ └── public/
 │
-└── README.md              → documentação
+└── README.md → documentação
 ```
 
