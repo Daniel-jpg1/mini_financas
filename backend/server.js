@@ -6,15 +6,17 @@ const sequelize = require("./database/connection");
 // Carrega variáveis de ambiente
 dotenv.config();
 
-// Carrega todas as models e associações
 require("./models/index");
+
+const routes = require("./routes");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Rota simples só para teste
+app.use("/api", routes);
+
 app.get("/", (req, res) => {
   res.send("Servidor está funcionando! 🚀");
 });
