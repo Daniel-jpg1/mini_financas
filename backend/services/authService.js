@@ -16,12 +16,10 @@ module.exports = {
       throw new Error("E-mail já cadastrado");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const user = await User.create({
       name,
       email,
-      password: hashedPassword
+      password
     });
 
     const safeUser = {
