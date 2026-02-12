@@ -11,11 +11,11 @@ const Account = sequelize.define("Account", {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  account_name: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  opening_balance: {
+  balance: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false
   }
@@ -23,7 +23,7 @@ const Account = sequelize.define("Account", {
   indexes: [
     {
       unique: true,
-      fields: ["user_id", "account_name"],
+      fields: ["user_id", "name"],
       name: "account_user_unique"
     }
   ]
