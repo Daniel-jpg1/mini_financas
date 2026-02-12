@@ -1,38 +1,60 @@
-const { Account } = require('../models');
+const { Account } = require("../models");
 
 module.exports = {
-
-  async createOrGet(userId) {
-    let account = await Account.findOne({ where: { user_id: userId } });
-
-    if (!account) {
-      account = await Account.create({
-        user_id: userId,
-        name: "Conta Principal",
-        balance: 0
-      });
-    }
-
-    return account;
+  async create({ userId, name, balance = 0 }) {
+    return Account.create({
+      user_id: userId,
+      name,
+      balance
+    });
   },
 
-  async getByUser(userId) {
-    const account = await Account.findOne({ where: { user_id: userId } });
-    if (!account) {
-      throw new Error("Conta não encontrada");
-    }
-    return account;
+  async getAll(userId) {
+    return Account.findAll({
+      where: { user_id: userId },
+      order: [["id", "ASC"]],
+    });
   },
 
-  async update(userId, updates) {
-    const account = await Account.findOne({ where: { user_id: userId } });
+  async update(userId, accountId, updates) {
+  const account = await Account.findOne({
+    where: { id: accountId, user_id: userId }
+  });
 
-    if (!account) {
-      throw new Error("Conta não encontrada");
+  if (!account) throw new Error("Conta não encontrada");
+
+  // Sanitização/validação do name no update
+  if ("name" in updates) {
+    const cleaned = String(updates.name).trim();
+
+    if (!cleaned) {
+      throw new Error("Nome da conta é obrigatório");
     }
 
-    await account.update(updates);
+    updates.name = cleaned;
+  }
 
-    return account;
+  if ("balance" in updates) {
+    const n = Number(updates.balance);
+    if (Number.isNaN(n)) {
+      throw new Error("Saldo deve ser um número válido");
+    }
+    updates.balance = n;
+  }
+
+  await account.update(updates);
+  return account;
+}
+,
+
+  async delete(userId, accountId) {
+    const account = await Account.findOne({
+      where: { id: accountId, user_id: userId }
+    });
+
+    if (!account) throw new Error("Conta não encontrada");
+
+    await account.destroy();
+    return { message: "Conta removida com sucesso" };
   }
 };
