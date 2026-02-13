@@ -2,10 +2,12 @@ const { Category } = require('../models');
 
 module.exports = {
 
-  async create({ userId, name }) {
-    if (!name) {
-      throw new Error("Nome da categoria é obrigatório");
-    }
+    async create({ userId, name }) {
+  if (typeof name !== "string" || !name.trim()) {
+    throw new Error("Nome da categoria é obrigatório");
+  }
+
+  const cleanName = name.trim();
 
     const exists = await Category.findOne({
       where: { user_id: userId, name }

@@ -27,11 +27,6 @@ sequelize.authenticate()
   .then(() => {
     console.log("Conexão com o MySQL estabelecida com sucesso!");
 
-    return sequelize.sync({ alter: true });
-  })
-  .then(() => {
-    console.log("Tabelas sincronizadas com sucesso! 🗄️");
-
     app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);
     });
@@ -39,3 +34,4 @@ sequelize.authenticate()
   .catch(err => {
     console.error("Erro ao iniciar servidor/MySQL:", err);
   });
+
