@@ -64,7 +64,7 @@ module.exports = {
 
       await categoryService.delete({ userId, id });
 
-      return res.status(204).send(); // Sem conteúdo, ação concluída
+      return res.status(204).send();
     } catch (err) {
       return res.status(400).json({ error: err.message });
     }
