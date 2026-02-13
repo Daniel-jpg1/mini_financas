@@ -34,4 +34,3 @@ sequelize.authenticate()
   .catch(err => {
     console.error("Erro ao iniciar servidor/MySQL:", err);
   });
-
