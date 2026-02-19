@@ -2,7 +2,7 @@ const { Category } = require('../models');
 
 module.exports = {
 
-    async create({ userId, name }) {
+    async create({ userId, name, description }) {
   if (typeof name !== "string" || !name.trim()) {
     throw new Error("Nome da categoria é obrigatório");
   }
@@ -19,7 +19,8 @@ module.exports = {
 
     const category = await Category.create({
       user_id: userId,
-      name
+      name,
+      description
     });
 
     return category;
@@ -32,34 +33,36 @@ module.exports = {
     });
   },
 
-  async update(id, userId, updates) {
-    const category = await Category.findOne({
-      where: { id, user_id: userId }
+async update(userId, id, updates) {
+  const category = await Category.findOne({ where: { user_id: userId, id } });
+  if (!category) throw new Error("Categoria não encontrada");
+
+  const clean = {};
+
+  if (Object.prototype.hasOwnProperty.call(updates, "name")) {
+    clean.name = (updates.name ?? "").trim();
+    if (!clean.name) throw new Error("Nome da categoria é obrigatório");
+
+    const duplicated = await Category.findOne({
+      where: { user_id: userId, name: clean.name }
     });
 
-    if (!category) {
-      throw new Error("Categoria não encontrada");
+    if (duplicated && duplicated.id !== category.id) {
+      throw new Error("Você já possui uma categoria com esse nome");
     }
+  }
 
-    if (updates.name) {
-      const duplicated = await Category.findOne({
-        where: {
-          user_id: userId,
-          name: updates.name
-        }
-      });
+  if (Object.prototype.hasOwnProperty.call(updates, "description")) {
+    clean.description = (updates.description ?? "").trim();
+    if (!clean.description) throw new Error("Descrição é obrigatória");
+  }
 
-      if (duplicated && duplicated.id !== category.id) {
-        throw new Error("Você já possui uma categoria com esse nome");
-      }
-    }
+  await category.update(clean);
+  return category;
+}
+,
 
-    await category.update(updates);
-
-    return category;
-  },
-
-  async remove(id, userId) {
+  async delete(id, userId) {
     const category = await Category.findOne({
       where: { id, user_id: userId }
     });

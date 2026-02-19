@@ -5,9 +5,9 @@ module.exports = {
   async create(req, res) {
     try {
       const userId = req.user.id;
-      const { name } = req.body;
+      const { name, description } = req.body;
 
-      const category = await categoryService.create({ userId, name });
+      const category = await categoryService.create({ userId, name, description });
 
       return res.status(201).json(category);
     } catch (err) {
@@ -43,26 +43,29 @@ module.exports = {
     try {
       const userId = req.user.id;
       const { id } = req.params;
-      const { name } = req.body;
 
-      const updatedCategory = await categoryService.update({
-        userId,
-        id,
-        name
-      });
-
-      return res.json(updatedCategory);
-    } catch (err) {
-      return res.status(400).json({ error: err.message });
+      const updates = {};
+      if (Object.prototype.hasOwnProperty.call(req.body, "name")) {
+        updates.name = req.body.name;
     }
-  },
+      if (Object.prototype.hasOwnProperty.call(req.body, "description")) {
+        updates.description = req.body.description;
+    }
+
+      const updatedCategory = await categoryService.update(userId, id, updates);
+      return res.json(updatedCategory);
+  }   catch (err) {
+      return res.status(400).json({ error: err.message });
+  }
+}
+,
 
   async delete(req, res) {
     try {
-      const userId = req.user.id;
       const { id } = req.params;
+      const userId = req.user.id;
 
-      await categoryService.delete({ userId, id });
+      await categoryService.delete( id, userId );
 
       return res.status(204).send();
     } catch (err) {
