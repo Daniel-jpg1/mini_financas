@@ -20,7 +20,7 @@ module.exports = {
         title,
         total_amount: amountNumber,
         description,
-        status: status || "Pagar",
+        status: status || "Pagar"
       });
 
       return res.status(201).json(debt);
