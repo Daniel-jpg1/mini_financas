@@ -1,20 +1,26 @@
-const debtService = require('../services/debtService');
+const debtService = require("../services/debtService");
 
 module.exports = {
   async create(req, res) {
     try {
       const userId = req.user.id;
-      const { title, amount, description } = req.body;
+      const { title, total_amount, description, accountId, status } = req.body;
 
       if (!title) return res.status(400).json({ error: "Título é obrigatório" });
-      if (!amount || amount <= 0)
+      if (!accountId) return res.status(400).json({ error: "Conta é obrigatória" });
+
+      const amountNumber = Number(total_amount);
+      if (!Number.isFinite(amountNumber) || amountNumber <= 0) {
         return res.status(400).json({ error: "Valor inválido" });
+      }
 
       const debt = await debtService.create({
         userId,
+        accountId,
         title,
-        amount,
-        description
+        total_amount: amountNumber,
+        description,
+        status: status || "Pagar",
       });
 
       return res.status(201).json(debt);
@@ -26,9 +32,7 @@ module.exports = {
   async index(req, res) {
     try {
       const userId = req.user.id;
-
       const debts = await debtService.getAll(userId);
-
       return res.json(debts);
     } catch (err) {
       return res.status(500).json({ error: err.message });
@@ -40,9 +44,7 @@ module.exports = {
       const userId = req.user.id;
       const { id } = req.params;
 
-      const updates = req.body;
-
-      const updated = await debtService.update(id, userId, updates);
+      const updated = await debtService.update(id, userId, req.body);
 
       return res.json(updated);
     } catch (err) {
@@ -61,5 +63,5 @@ module.exports = {
     } catch (err) {
       return res.status(400).json({ error: err.message });
     }
-  }
+  },
 };

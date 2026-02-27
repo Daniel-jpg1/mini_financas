@@ -9,6 +9,7 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
+
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -16,6 +17,7 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
+
       account_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -23,40 +25,50 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
+
       type: {
-        type: Sequelize.ENUM("Pagar", "Receber", "Emprestimo", "Parcelamento", "Fatura"),
+        type: Sequelize.ENUM(
+          "Pagar",
+          "Receber",
+          "Emprestimo",
+          "Parcelamento",
+          "Fatura"
+        ),
         allowNull: false,
       },
+
       title: {
         type: Sequelize.STRING,
         allowNull: false,
       },
+
       total_amount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
-      due_date: {
-        type: Sequelize.DATEONLY,
-        allowNull: true,
-      },
+
       number_installments: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+
       description: {
         type: Sequelize.TEXT,
         allowNull: true,
       },
+
       transaction_date: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.fn("NOW"),
       },
+
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.fn("NOW"),
       },
+
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -65,7 +77,11 @@ module.exports = {
     });
   },
 
-  async down(queryInterface) {
+  async down(queryInterface, Sequelize) {
+    // em Postgres, ENUM fica registrado no DB; remover evita erro em re-migration
     await queryInterface.dropTable("Debts");
+    await queryInterface.sequelize.query(
+      'DROP TYPE IF EXISTS "enum_Debts_status";'
+    );
   },
 };

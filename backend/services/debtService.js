@@ -1,44 +1,40 @@
-const { Debt, Installment } = require('../models');
+const { Debt, Installment } = require("../models");
 
 module.exports = {
-  
-  async create({ userId, title, total_amount, due_date }) {
-    if (!title) {
-      throw new Error("Título da dívida é obrigatório");
-    }
+  async create({ userId, accountId, title, total_amount, description, status }) {
+    if (!title) throw new Error("Título da dívida é obrigatório");
+    if (!accountId) throw new Error("Conta é obrigatória");
 
-    if (!total_amount || total_amount <= 0) {
-      throw new Error("Valor total inválido");
+    const amountNumber = Number(total_amount);
+    if (!Number.isFinite(amountNumber) || amountNumber <= 0) {
+      throw new Error("Valor inválido");
     }
 
     const debt = await Debt.create({
       user_id: userId,
+      account_id: accountId,
       title,
-      total_amount,
-      due_date,
-      status: "pending"
+      total_amount: amountNumber,
+      description,
+      status: status || "Pagar",
     });
 
     return debt;
   },
 
   async getAll(userId) {
-    const debts = await Debt.findAll({
+    return Debt.findAll({
       where: { user_id: userId },
-      order: [["createdAt", "DESC"]]
+      order: [["createdAt", "DESC"]],
     });
-
-    return debts;
   },
 
   async getById(id, userId) {
     const debt = await Debt.findOne({
-      where: { id, user_id: userId }
+      where: { id, user_id: userId },
     });
 
-    if (!debt) {
-      throw new Error("Dívida não encontrada");
-    }
+    if (!debt) throw new Error("Dívida não encontrada");
 
     return debt;
   },
@@ -46,8 +42,28 @@ module.exports = {
   async update(id, userId, updates) {
     const debt = await this.getById(id, userId);
 
-    await debt.update(updates);
+    const allowed = [
+      "title",
+      "total_amount",
+      "description",
+      "status",
+      "number_installments",
+      "transaction_date",
+    ];
 
+    const cleanUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([k]) => allowed.includes(k))
+    );
+
+    if (cleanUpdates.total_amount !== undefined) {
+      const amountNumber = Number(cleanUpdates.total_amount);
+      if (!Number.isFinite(amountNumber) || amountNumber <= 0) {
+        throw new Error("Valor inválido");
+      }
+      cleanUpdates.total_amount = amountNumber;
+    }
+
+    await debt.update(cleanUpdates);
     return debt;
   },
 
@@ -55,7 +71,7 @@ module.exports = {
     const debt = await this.getById(id, userId);
 
     const hasInstallments = await Installment.findOne({
-      where: { debt_id: id }
+      where: { debt_id: id },
     });
 
     if (hasInstallments) {
@@ -63,7 +79,6 @@ module.exports = {
     }
 
     await debt.destroy();
-
     return true;
-  }
+  },
 };
