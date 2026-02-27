@@ -2,7 +2,7 @@ const { Installment, Debt } = require('../models');
 
 module.exports = {
 
-  async create({ userId, debt_id, amount, due_date, installment_number }) {
+  async create({ userId, debt_id, account_id, amount, due_date, installment_number }) {
 
     if (!debt_id) throw new Error("ID da dívida é obrigatório");
     if (!amount || amount <= 0) throw new Error("Valor da parcela inválido");
@@ -17,12 +17,13 @@ module.exports = {
     }
 
     const installment = await Installment.create({
+      user_id: userId,
       debt_id,
+      account_id,
       amount,
       due_date,
-      installment_number,
-      status: "pending"
-    });
+      installment_number
+      });
 
     return installment;
   },
@@ -45,22 +46,20 @@ module.exports = {
     return installments;
   },
 
-  async update(id, userId, updates) {
+  async update({ id, userId, amount, due_date, status }) {
     const installment = await Installment.findOne({ where: { id } });
 
-    if (!installment) {
-      throw new Error("Parcela não encontrada");
-    }
+    if (!installment) throw new Error("Parcela não encontrada");
 
     const debt = await Debt.findOne({
       where: { id: installment.debt_id, user_id: userId }
     });
 
-    if (!debt) {
-      throw new Error("Você não tem permissão para alterar esta parcela");
-    }
+    if (!debt) throw new Error("Você não tem permissão para alterar esta parcela");
 
-    if (updates.amount && updates.amount <= 0) {
+    const updates = { amount, due_date, status };
+
+    if (updates.amount != null && updates.amount <= 0) {
       throw new Error("Valor inválido");
     }
 
@@ -69,7 +68,7 @@ module.exports = {
     return installment;
   },
 
-  async remove(id, userId) {
+  async delete(id, userId) {
     const installment = await Installment.findOne({ where: { id } });
 
     if (!installment) {
