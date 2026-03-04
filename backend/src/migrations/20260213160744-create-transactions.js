@@ -9,6 +9,7 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
+
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -16,6 +17,7 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
+
       account_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -23,14 +25,17 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
+
       type: {
         type: Sequelize.ENUM("Pix", "Credito", "Dinheiro", "Debito"),
         allowNull: false,
       },
+
       direction: {
         type: Sequelize.ENUM("Receber", "Pagar"),
         allowNull: false,
       },
+
       category_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
@@ -38,6 +43,7 @@ module.exports = {
         onDelete: "SET NULL",
         onUpdate: "CASCADE",
       },
+
       installment_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
@@ -45,28 +51,33 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
+
       amount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
+
       description: {
         type: Sequelize.TEXT,
         allowNull: true,
       },
+
       transaction_date: {
         type: Sequelize.DATE,
-        allowNull: true,
-        defaultValue: Sequelize.fn("NOW"),
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
+
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn("NOW"),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
+
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn("NOW"),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },
