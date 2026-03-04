@@ -5,46 +5,48 @@ const Transaction = sequelize.define("Transaction", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
   },
   user_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   account_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   type: {
     type: DataTypes.ENUM("Pix", "Credito", "Dinheiro", "Debito"),
-    allowNull: false
+    allowNull: false,
   },
   direction: {
     type: DataTypes.ENUM("Receber", "Pagar"),
-    allowNull: false
+    allowNull: false,
   },
   category_id: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: true,
   },
   installment_id: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: true,
   },
   amount: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
-    validate: { 
-      min: 0.01 
-    }
+    validate: {
+      min: 0.01,
+    },
   },
   description: {
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT,
+    allowNull: true,
   },
   transaction_date: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
-  }
+    defaultValue: DataTypes.NOW,
+    allowNull: false, 
+  },
 });
 
 module.exports = Transaction;

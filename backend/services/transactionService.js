@@ -1,40 +1,69 @@
-const { Transaction, Category, Account } = require('../models');
+const { Transaction, Category, Account } = require("../models");
+
+const PAYMENT_TYPES = ["Pix", "Credito", "Dinheiro", "Debito"];
+const DIRECTIONS = ["Receber", "Pagar"];
+
+function toNumberOrNaN(value) {
+  const n = typeof value === "string" ? Number(value.replace(",", ".")) : Number(value);
+  return n;
+}
 
 module.exports = {
 
-  async create({ userId, title, amount, type, category_id, transaction_date, account_id }) {
-
-    if (!title) throw new Error("Título é obrigatório");
-    if (!amount || amount <= 0) throw new Error("Valor inválido");
-    if (!["income", "expense"].includes(type)) throw new Error("Tipo de transação inválido");
-
-    const category = await Category.findOne({
-      where: { id: category_id, user_id: userId }
-    });
-
-    if (!category) {
-      throw new Error("Categoria não encontrada");
+  async create({
+    userId,
+    amount,
+    type,
+    direction,
+    category_id,
+    account_id,
+    description,
+    transaction_date,
+  }) {
+    const parsedAmount = toNumberOrNaN(amount);
+    if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+      throw new Error("Valor inválido");
     }
 
-    // Se tiver accounts futuramente:
-    if (account_id) {
-      const account = await Account.findOne({
-        where: { id: account_id, user_id: userId }
+    if (!PAYMENT_TYPES.includes(type)) {
+      throw new Error("Tipo inválido (Pix, Credito, Dinheiro ou Debito)");
+    }
+
+    if (!DIRECTIONS.includes(direction)) {
+      throw new Error("Direção inválida (Receber ou Pagar)");
+    }
+
+    if (!account_id) {
+      throw new Error("Conta (account_id) é obrigatória");
+    }
+
+    const account = await Account.findOne({
+      where: { id: account_id, user_id: userId },
+    });
+
+    if (!account) {
+      throw new Error("Conta bancária não encontrada");
+    }
+
+    if (category_id) {
+      const category = await Category.findOne({
+        where: { id: category_id, user_id: userId },
       });
 
-      if (!account) {
-        throw new Error("Conta bancária não encontrada");
+      if (!category) {
+        throw new Error("Categoria inválida");
       }
     }
 
     const transaction = await Transaction.create({
       user_id: userId,
-      category_id,
-      account_id: account_id || null,
-      title,
-      amount,
+      account_id,
       type,
-      transaction_date
+      direction,
+      category_id: category_id || null,
+      amount: parsedAmount,
+      description: description || null,
+      transaction_date: transaction_date || undefined,
     });
 
     return transaction;
@@ -43,47 +72,61 @@ module.exports = {
   async getAll(userId) {
     return await Transaction.findAll({
       where: { user_id: userId },
-      order: [['transaction_date', 'DESC']]
+      order: [["transaction_date", "DESC"]],
     });
   },
 
   async update(id, userId, updates) {
-
     const transaction = await Transaction.findOne({
-      where: { id, user_id: userId }
+      where: { id, user_id: userId },
     });
 
     if (!transaction) {
       throw new Error("Transação não encontrada");
     }
 
-    // Validações opcionais no update
-    if (updates.amount && updates.amount <= 0) {
-      throw new Error("Valor inválido");
+    if (updates.amount !== undefined) {
+      const parsedAmount = toNumberOrNaN(updates.amount);
+      if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+        throw new Error("Valor inválido");
+      }
+      updates.amount = parsedAmount;
     }
 
-    if (updates.type && !["income", "expense"].includes(updates.type)) {
-      throw new Error("Tipo inválido");
-    }
-
-    if (updates.category_id) {
-      const category = await Category.findOne({
-        where: { id: updates.category_id, user_id: userId }
-      });
-
-      if (!category) {
-        throw new Error("Categoria inválida");
+    if (updates.type !== undefined) {
+      if (!PAYMENT_TYPES.includes(updates.type)) {
+        throw new Error("Tipo inválido (Pix, Credito, Dinheiro ou Debito)");
       }
     }
 
-    if (updates.account_id) {
+    if (updates.direction !== undefined) {
+      if (!DIRECTIONS.includes(updates.direction)) {
+        throw new Error("Direção inválida (Receber ou Pagar)");
+      }
+    }
+
+    if (updates.category_id !== undefined) {
+      // permitir null pra remover categoria
+      if (updates.category_id === null || updates.category_id === "") {
+        updates.category_id = null;
+      } else {
+        const category = await Category.findOne({
+          where: { id: updates.category_id, user_id: userId },
+        });
+        if (!category) throw new Error("Categoria inválida");
+      }
+    }
+
+    if (updates.account_id !== undefined) {
+      if (!updates.account_id) {
+        throw new Error("Conta (account_id) é obrigatória");
+      }
+
       const account = await Account.findOne({
-        where: { id: updates.account_id, user_id: userId }
+        where: { id: updates.account_id, user_id: userId },
       });
 
-      if (!account) {
-        throw new Error("Conta bancária inválida");
-      }
+      if (!account) throw new Error("Conta bancária inválida");
     }
 
     await transaction.update(updates);
@@ -93,7 +136,7 @@ module.exports = {
 
   async remove(id, userId) {
     const transaction = await Transaction.findOne({
-      where: { id, user_id: userId }
+      where: { id, user_id: userId },
     });
 
     if (!transaction) {
@@ -101,7 +144,6 @@ module.exports = {
     }
 
     await transaction.destroy();
-
     return true;
-  }
+  },
 };
