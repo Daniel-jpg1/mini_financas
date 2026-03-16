@@ -1,0 +1,114 @@
+/* Estilo avisos */
+.warnings {
+  border: 1px solid red;
+  height: 230px;
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.warning1 {
+  border: 1px solid red;
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+}
+
+.avisos {
+  text-align: center;
+  font-size: 28px;
+  margin: 5px;
+}
+/* Estilo valor da conta */
+.value {
+  margin-top: 30px;
+  margin-left: 5px;
+  font-size: 22px;
+}
+/* Estilo seções do app */
+
+.sections {
+  margin-top: 25px;
+  border: 1px solid red;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: space-between;
+}
+
+.circlesection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.transactionssection {
+  border: 1px solid red;
+  height: 60px;
+  width: 60px;
+  border-radius: 100%;
+}
+
+.categoriessection {
+  border: 1px solid red;
+  height: 60px;
+  width: 60px;
+  border-radius: 100%;
+}
+
+.accountssection {
+  border: 1px solid red;
+  height: 60px;
+  width: 60px;
+  border-radius: 100%;
+}
+
+.installmentssection {
+  border: 1px solid red;
+  height: 60px;
+  width: 60px;
+  border-radius: 100%;
+}
+
+/* Estilo resumo */
+
+.summaries {
+  border: 1px solid red;
+  height: auto;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.summarytransactions {
+  border: 1px solid red;
+  height: 50px;
+  width: 310px;
+  margin-top: 10px;
+}
+
+.summarycategories {
+  border: 1px solid red;
+  height: 50px;
+  width: 310px;
+  margin-top: 10px;
+}
+
+.summaryaccounts {
+  border: 1px solid red;
+  height: 50px;
+  width: 310px;
+  margin-top: 10px;
+}
+
+.summaryinstallments {
+  border: 1px solid red;
+  height: 50px;
+  width: 310px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
