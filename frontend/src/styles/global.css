@@ -1,0 +1,27 @@
+/* Estilos gerais */
+* {
+  margin: 0px;
+}
+/* Estilos header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.leftheader,
+.centerheader,
+.rightheader {
+  display: flex;
+  padding: 4px;
+}
+
+.centerheader {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rightheader {
+  gap: 7px;
+}
