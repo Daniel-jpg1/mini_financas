@@ -1,5 +1,3 @@
-import Header from "../../components/header.jsx";
-
 function Login() {
   return (
     <section>

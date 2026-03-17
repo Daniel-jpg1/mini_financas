@@ -4,14 +4,21 @@ import user from "../assets/icons/user.svg";
 import money from "../assets/icons/money.svg";
 import eye from "../assets/icons/eye.svg";
 import light from "../assets/icons/light.svg";
+import back from "../assets/icons/back.svg";
 
-function Header() {
+function Header({ showBackButton = false }) {
   return (
     <section className="header">
       <div className="leftheader">
-        <Link to="">
-          <img src={user} alt="Opções de conta" width="30px" height="40px" />
-        </Link>
+        {showBackButton ? (
+          <Link to="/dashboard">
+            <img src={back} alt="Voltar" width="30px" height="40px" />
+          </Link>
+        ) : (
+          <Link to="/profile">
+            <img src={user} alt="Opções de conta" width="30px" height="40px" />
+          </Link>
+        )}
       </div>
       <div className="centerheader">
         <Link to="">
