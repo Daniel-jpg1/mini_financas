@@ -1,3 +1,4 @@
+import CircleShortcut from "../../components/circleShortcut.jsx";
 import Header from "../../components/header.jsx";
 import { Link } from "react-router-dom";
 
@@ -13,22 +14,26 @@ function Dashboard() {
       <h2 className="value">Valor total: R$ 100,00</h2>
       {/* seções do app */}
       <section className="sections">
-        <section className="circlesection">
-          <Link to="/transactions" className="transactionssection"></Link>
-          <span>Transações</span>
-        </section>
-        <section className="circlesection">
-          <Link to="" className="categoriessection"></Link>
-          <span>Categorias</span>
-        </section>
-        <section className="circlesection">
-          <Link to="" className="accountssection"></Link>
-          <span>Contas</span>
-        </section>
-        <section className="circlesection">
-          <Link to="" className="installmentssection"></Link>
-          <span>Dívidas</span>
-        </section>
+        <CircleShortcut
+          to="/transactions"
+          className="transactionssection"
+          label="Transações"
+        />
+        <CircleShortcut
+          to="/categories"
+          className="categoriessection"
+          label="Categorias"
+        />
+        <CircleShortcut
+          to="/accounts"
+          className="accountssection"
+          label="Contas"
+        />
+        <CircleShortcut
+          to="/installments"
+          className="installmentssection"
+          label="Dívidas"
+        />
       </section>
       {/* Resumos das seções */}
       <section className="summaries">

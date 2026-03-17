@@ -37,35 +37,23 @@
   justify-content: space-between;
 }
 
-.circlesection {
+.circleSection {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
 }
 
-.transactionssection {
-  border: 1px solid red;
-  height: 60px;
-  width: 60px;
-  border-radius: 100%;
-}
-
-.categoriessection {
-  border: 1px solid red;
-  height: 60px;
-  width: 60px;
-  border-radius: 100%;
-}
-
-.accountssection {
-  border: 1px solid red;
-  height: 60px;
-  width: 60px;
-  border-radius: 100%;
-}
-
-.installmentssection {
+.transactionssection,
+.categoriessection,
+.accountssection,
+.installmentssection,
+.addAccount,
+.editAccount,
+.deleteAccount,
+.addInstallment,
+.editInstallment,
+.deleteInstallment {
   border: 1px solid red;
   height: 60px;
   width: 60px;
@@ -111,4 +99,83 @@
   width: 310px;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+/* Últimas 3 transações */
+
+.warningTransactions {
+  text-align: center;
+  font-size: 25px;
+  margin: 5px;
+}
+
+.threeTransactions {
+  border: 1px solid red;
+  height: 230px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+}
+
+.transaction1 {
+  border: 1px solid red;
+  width: 330px;
+  height: 60px;
+  margin: 10px;
+}
+
+/* Gráfico coluna tela de transações */
+
+.columnChart {
+  margin-top: 35px;
+  border: 1px solid red;
+  height: 250px;
+  text-align: center;
+}
+
+/* Histórico de transações */
+
+.transactionHistory {
+  border: 1px solid red;
+  margin-top: 35px;
+  margin-bottom: 15px;
+  height: 220px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history1 {
+  border: 1px solid red;
+  height: 40px;
+  width: 330px;
+  margin: 20px;
+}
+
+/* Estilos das categorias */
+
+.pieChart {
+  margin-top: 25px;
+  border: 1px solid red;
+  height: 230px;
+  text-align: center;
+}
+
+/* Estilos Contas */
+
+.accountCardSection {
+  border: 1px solid red;
+  margin: 20px;
+  height: 60px;
+}
+
+/* Estilos Dívidas */
+
+.installmentCardSection {
+  border: 1px solid red;
+  margin: 20px;
+  height: 60px;
 }
