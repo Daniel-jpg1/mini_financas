@@ -1,6 +1,7 @@
 import CircleShortcut from "../../components/circleShortcut.jsx";
 import Header from "../../components/header.jsx";
 import { Link } from "react-router-dom";
+import WarningCard from "../../components/warningCard.jsx";
 
 function Dashboard() {
   return (
@@ -9,7 +10,9 @@ function Dashboard() {
       {/* Inicio da seção de avisos */}
       <h1 className="avisos">Avisos</h1>
       <section className="warnings">
-        <article className="warning1"></article>
+        <WarningCard />
+        <WarningCard />
+        <WarningCard />
       </section>
       <h2 className="value">Valor total: R$ 100,00</h2>
       {/* seções do app */}
