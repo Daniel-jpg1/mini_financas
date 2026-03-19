@@ -7,5 +7,6 @@ router.use("/categories", require("./categoryRoutes"));
 router.use("/debts", require("./debtRoutes"));
 router.use("/installments", require("./installmentRoutes"));
 router.use("/transactions", require("./transactionRoutes"));
+router.use("/dashboard", require("./dashboardRoutes"));
 
 module.exports = router;
