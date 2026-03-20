@@ -1,6 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
 /* Estilos gerais */
 * {
   margin: 0px;
+  font-family: "Montserrat", sans-serif;
 }
 /* Estilos header */
 .header {
