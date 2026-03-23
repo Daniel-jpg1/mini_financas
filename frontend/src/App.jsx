@@ -6,7 +6,7 @@ import Dashboard from "./pages/dashboard/dashboard.jsx";
 import Accounts from "./pages/accounts/Accounts.jsx";
 import Categories from "./pages/categories/Categories.jsx";
 import Transactions from "./pages/transactions/Transactions.jsx";
-import Installments from "./pages/installments/Installments.jsx";
+import Debts from "./pages/debts/Debts.jsx";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
       <Route path="/accounts" element={<Accounts />} />
       <Route path="/categories" element={<Categories />} />
       <Route path="/transactions" element={<Transactions />} />
-      <Route path="/installments" element={<Installments />} />
+      <Route path="/debts" element={<Debts />} />
     </Routes>
   );
 }

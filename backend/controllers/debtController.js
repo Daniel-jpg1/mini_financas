@@ -6,8 +6,10 @@ module.exports = {
       const userId = req.user.id;
       const { title, total_amount, description, accountId, status } = req.body;
 
-      if (!title) return res.status(400).json({ error: "Título é obrigatório" });
-      if (!accountId) return res.status(400).json({ error: "Conta é obrigatória" });
+      if (!title)
+        return res.status(400).json({ error: "Título é obrigatório" });
+      if (!accountId)
+        return res.status(400).json({ error: "Conta é obrigatória" });
 
       const amountNumber = Number(total_amount);
       if (!Number.isFinite(amountNumber) || amountNumber <= 0) {
@@ -20,7 +22,7 @@ module.exports = {
         title,
         total_amount: amountNumber,
         description,
-        status: status || "Pagar"
+        status: status || "Pagar",
       });
 
       return res.status(201).json(debt);
