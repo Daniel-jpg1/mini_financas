@@ -87,7 +87,7 @@ function Dashboard() {
           label="Contas"
         />
         <CircleShortcut
-          to="/installments"
+          to="/debts"
           className="installmentssection"
           label="Dívidas"
         />
