@@ -4,7 +4,14 @@ module.exports = {
   async create(req, res) {
     try {
       const userId = req.user.id;
-      const { title, total_amount, description, accountId, status } = req.body;
+      const {
+        title,
+        total_amount,
+        number_installments,
+        description,
+        accountId,
+        status,
+      } = req.body;
 
       if (!title)
         return res.status(400).json({ error: "Título é obrigatório" });
@@ -21,6 +28,7 @@ module.exports = {
         accountId,
         title,
         total_amount: amountNumber,
+        number_installments,
         description,
         status: status || "Pagar",
       });
