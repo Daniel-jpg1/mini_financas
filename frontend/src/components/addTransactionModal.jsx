@@ -6,7 +6,6 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
   const [total_amount, setTotal] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [number_installments, setNumber_Installments] = useState("");
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -28,7 +27,6 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
         title,
         total_amount: Number(total_amount),
         description,
-        number_installments: Number(number_installments),
         accountId: accountIdNumber,
         status,
       };
@@ -58,7 +56,6 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
       setSelectedAccountId("");
       setTitle("");
       setTotal("");
-      setNumber_Installments("");
       setDescription("");
       setStatus("");
       onClose();
@@ -102,13 +99,6 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
             placeholder="Valor da dívida"
             value={total_amount}
             onChange={(e) => setTotal(e.target.value)}
-          />
-
-          <input
-            type="number"
-            placeholder="Número de parcelas"
-            value={number_installments}
-            onChange={(e) => setNumber_Installments(e.target.value)}
           />
 
           <input

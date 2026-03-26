@@ -1,7 +1,16 @@
+const { number } = require("joi");
 const { Debt, Installment } = require("../models");
 
 module.exports = {
-  async create({ userId, accountId, title, total_amount, description, status }) {
+  async create({
+    userId,
+    accountId,
+    title,
+    total_amount,
+    number_installments,
+    description,
+    status,
+  }) {
     if (!title) throw new Error("Título da dívida é obrigatório");
     if (!accountId) throw new Error("Conta é obrigatória");
 
@@ -10,11 +19,17 @@ module.exports = {
       throw new Error("Valor inválido");
     }
 
+    const numberInstallments = Number(number_installments);
+    if (!Number.isFinite(numberInstallments) || numberInstallments <= 0) {
+      throw new Error("Valor inválido");
+    }
+
     const debt = await Debt.create({
       user_id: userId,
       account_id: accountId,
       title,
       total_amount: amountNumber,
+      number_installments,
       description,
       status: status || "Pagar",
     });
@@ -45,6 +60,7 @@ module.exports = {
     const allowed = [
       "title",
       "total_amount",
+      "number_installments",
       "description",
       "status",
       "number_installments",
@@ -52,7 +68,7 @@ module.exports = {
     ];
 
     const cleanUpdates = Object.fromEntries(
-      Object.entries(updates).filter(([k]) => allowed.includes(k))
+      Object.entries(updates).filter(([k]) => allowed.includes(k)),
     );
 
     if (cleanUpdates.total_amount !== undefined) {
