@@ -1,3 +1,5 @@
+const installmentService = require("./installmentService");
+
 const { number } = require("joi");
 const { Debt, Installment } = require("../models");
 
@@ -8,11 +10,16 @@ module.exports = {
     title,
     total_amount,
     number_installments,
+    due_date,
     description,
     status,
   }) {
     if (!title) throw new Error("Título da dívida é obrigatório");
     if (!accountId) throw new Error("Conta é obrigatória");
+    if (!total_amount) throw new Error("Valor da dívida é obrigatório");
+    if (!number_installments)
+      throw new Error("Número de parcelas é obrigatório");
+    if (!due_date) throw new Error("Data de vencimento é obrigatória");
 
     const amountNumber = Number(total_amount);
     if (!Number.isFinite(amountNumber) || amountNumber <= 0) {
@@ -30,9 +37,28 @@ module.exports = {
       title,
       total_amount: amountNumber,
       number_installments,
+      due_date,
       description,
       status: status || "Pagar",
     });
+
+    const installmentAmount = amountNumber / numberInstallments;
+
+    const baseDate = new Date(due_date);
+
+    for (let i = 1; i <= numberInstallments; i++) {
+      const installmentDate = new Date(baseDate);
+      installmentDate.setMonth(baseDate.getMonth() + (i - 1));
+
+      await installmentService.create({
+        userId,
+        debt_id: debt.id,
+        account_id: accountId,
+        amount: installmentAmount,
+        due_date: installmentDate,
+        installment_number: i,
+      });
+    }
 
     return debt;
   },
@@ -89,10 +115,6 @@ module.exports = {
     const hasInstallments = await Installment.findOne({
       where: { debt_id: id },
     });
-
-    if (hasInstallments) {
-      throw new Error("Não é possível apagar uma dívida que possui parcelas");
-    }
 
     await debt.destroy();
     return true;

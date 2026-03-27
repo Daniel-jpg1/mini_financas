@@ -8,6 +8,7 @@ module.exports = {
         title,
         total_amount,
         number_installments,
+        due_date,
         description,
         accountId,
         status,
@@ -17,6 +18,14 @@ module.exports = {
         return res.status(400).json({ error: "Título é obrigatório" });
       if (!accountId)
         return res.status(400).json({ error: "Conta é obrigatória" });
+      if (!number_installments)
+        return res
+          .status(400)
+          .json({ error: "Número de parcelas é obrigatório" });
+      if (!due_date)
+        return res
+          .status(400)
+          .json({ error: "Data de vencimento é obrigatória" });
 
       const amountNumber = Number(total_amount);
       if (!Number.isFinite(amountNumber) || amountNumber <= 0) {
@@ -29,6 +38,7 @@ module.exports = {
         title,
         total_amount: amountNumber,
         number_installments,
+        due_date,
         description,
         status: status || "Pagar",
       });

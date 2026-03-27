@@ -7,14 +7,12 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const [number_installments, setNumber_Installments] = useState("");
+  const [due_date, setDue_Date] = useState("");
 
   async function handleSubmit(event) {
     event.preventDefault();
 
     const accountIdNumber = Number(selectedAccountId);
-
-    console.log("selectedAccountId:", selectedAccountId);
-    console.log("accountIdNumber:", accountIdNumber);
 
     if (!selectedAccountId) {
       console.log("Nenhuma conta selecionada");
@@ -29,11 +27,10 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
         total_amount: Number(total_amount),
         description,
         number_installments: Number(number_installments),
+        due_date,
         accountId: accountIdNumber,
         status,
       };
-
-      console.log("payload enviado:", payload);
 
       const response = await fetch("http://localhost:3000/api/debts", {
         method: "POST",
@@ -59,6 +56,7 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
       setTitle("");
       setTotal("");
       setNumber_Installments("");
+      setDue_Date("");
       setDescription("");
       setStatus("");
       onClose();
@@ -109,6 +107,13 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
             placeholder="Número de parcelas"
             value={number_installments}
             onChange={(e) => setNumber_Installments(e.target.value)}
+          />
+
+          <input
+            type="date"
+            placeholder="Data de vencimento"
+            value={due_date}
+            onChange={(e) => setDue_Date(e.target.value)}
           />
 
           <input
