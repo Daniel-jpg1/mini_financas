@@ -1,36 +1,36 @@
 import { useState, useEffect } from "react";
 
 function ColumnChart() {
-  const [debt, setDebt] = useState([]);
+  const [installment, setInstallment] = useState([]);
   const maxValue = 10000;
   let leftSteps = 5;
   let labels = [];
-  const months = useState([
-    { month: "Jan", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Fev", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Mar", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Abr", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Mai", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Jun", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Jul", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Ago", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Set", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Out", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Nov", recebidas: 500, feitas: 400, dividas: 300 },
-    { month: "Dez", recebidas: 500, feitas: 400, dividas: 300 },
-  ]);
-  console.log(months);
+  const totalAmounts = installment.map((item) => item.installmentAmount);
+  const months = [
+    { month: "Jan", received: 500, feitas: 400, installments: totalAmounts },
+    { month: "Fev", received: 500, feitas: 400, debts: 300 },
+    { month: "Mar", received: 500, feitas: 400, debts: 300 },
+    { month: "Abr", received: 500, feitas: 400, debts: 300 },
+    { month: "Mai", received: 500, feitas: 400, debts: 300 },
+    { month: "Jun", received: 500, feitas: 400, debts: 300 },
+    { month: "Jul", received: 500, feitas: 400, debts: 300 },
+    { month: "Ago", received: 500, feitas: 400, debts: 300 },
+    { month: "Set", received: 500, feitas: 400, debts: 300 },
+    { month: "Out", received: 500, feitas: 400, debts: 300 },
+    { month: "Nov", received: 500, feitas: 400, debts: 300 },
+    { month: "Dez", received: 500, feitas: 400, debts: 300 },
+  ];
 
   for (let i = 0; i <= leftSteps; i++) {
     labels.push(Math.round((maxValue / leftSteps) * i));
   }
 
   useEffect(() => {
-    async function fetchDebts() {
+    async function fetchInstallments() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch("http://localhost:3000/api/debts", {
+        const response = await fetch("http://localhost:3000/api/installments", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -45,27 +45,24 @@ function ColumnChart() {
           return;
         }
 
-        setDebt(data);
+        setInstallment(data);
       } catch (error) {
         console.error("Erro ao mostrar dados", error);
       }
     }
 
-    fetchDebts();
+    fetchInstallments();
   }, []);
 
   return (
     <section className="columnChart">
-      {debt.map((item) => {
-        return <h1 key={item.id}>{item.total_amount}</h1>;
-      })}
       {months.map((month) => {
         return (
           <h1 key={month.month}>
-            {month.month} {month.recebidas} {month.feitas} {month.dividas}
+            {month.month} {month.installments}
           </h1>
         );
-      })}{" "}
+      })}
     </section>
   );
 }
