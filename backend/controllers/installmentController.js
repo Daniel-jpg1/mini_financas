@@ -1,22 +1,26 @@
-const installmentService = require('../services/installmentService');
+const installmentService = require("../services/installmentService");
 
 module.exports = {
-
   async create(req, res) {
     try {
       const userId = req.user.id;
-      const { debt_id, account_id, amount, due_date, installment_number } = req.body;
+      const { debt_id, account_id, amount, due_date, installment_number } =
+        req.body;
 
       if (!debt_id) {
         return res.status(400).json({ error: "debt_id is required" });
       }
 
       if (!amount || amount <= 0) {
-        return res.status(400).json({ error: "amount must be greater than zero" });
+        return res
+          .status(400)
+          .json({ error: "amount must be greater than zero" });
       }
 
       if (!installment_number || installment_number <= 0) {
-        return res.status(400).json({ error: "installment_number is required" });
+        return res
+          .status(400)
+          .json({ error: "installment_number is required" });
       }
 
       const installment = await installmentService.create({
@@ -25,8 +29,8 @@ module.exports = {
         account_id,
         amount,
         due_date,
-        installment_number
-       });
+        installment_number,
+      });
 
       return res.status(201).json(installment);
     } catch (err) {
@@ -71,7 +75,7 @@ module.exports = {
         userId,
         amount,
         due_date,
-        status
+        status,
       });
 
       return res.json(updated);
@@ -85,11 +89,20 @@ module.exports = {
       const userId = req.user.id;
       const { id } = req.params;
 
-      await installmentService.delete( id, userId );
+      await installmentService.delete(id, userId);
 
       return res.status(204).send();
     } catch (err) {
       return res.status(400).json({ error: err.message });
     }
-  }
+  },
+  async getAllUserInstallments(req, res) {
+    try {
+      const userId = req.user.id;
+      const installments = await installmentService.getAllFromUser(userId);
+      return res.json(installments);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
+  },
 };
