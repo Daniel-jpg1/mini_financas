@@ -59,7 +59,6 @@ module.exports = {
         installment_number: i,
       });
     }
-
     return debt;
   },
 

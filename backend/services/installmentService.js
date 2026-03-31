@@ -1,15 +1,20 @@
-const { Installment, Debt } = require('../models');
+const { Installment, Debt } = require("../models");
 
 module.exports = {
-
-  async create({ userId, debt_id, account_id, amount, due_date, installment_number }) {
-
+  async create({
+    userId,
+    debt_id,
+    account_id,
+    amount,
+    due_date,
+    installment_number,
+  }) {
     if (!debt_id) throw new Error("ID da dívida é obrigatório");
     if (!amount || amount <= 0) throw new Error("Valor da parcela inválido");
     if (!installment_number) throw new Error("Número da parcela é obrigatório");
 
     const debt = await Debt.findOne({
-      where: { id: debt_id, user_id: userId }
+      where: { id: debt_id, user_id: userId },
     });
 
     if (!debt) {
@@ -22,16 +27,15 @@ module.exports = {
       account_id,
       amount,
       due_date,
-      installment_number
-      });
+      installment_number,
+    });
 
     return installment;
   },
 
   async getByDebt(debt_id, userId) {
-
     const debt = await Debt.findOne({
-      where: { id: debt_id, user_id: userId }
+      where: { id: debt_id, user_id: userId },
     });
 
     if (!debt) {
@@ -40,7 +44,7 @@ module.exports = {
 
     const installments = await Installment.findAll({
       where: { debt_id },
-      order: [["installment_number", "ASC"]]
+      order: [["installment_number", "ASC"]],
     });
 
     return installments;
@@ -52,10 +56,11 @@ module.exports = {
     if (!installment) throw new Error("Parcela não encontrada");
 
     const debt = await Debt.findOne({
-      where: { id: installment.debt_id, user_id: userId }
+      where: { id: installment.debt_id, user_id: userId },
     });
 
-    if (!debt) throw new Error("Você não tem permissão para alterar esta parcela");
+    if (!debt)
+      throw new Error("Você não tem permissão para alterar esta parcela");
 
     const updates = { amount, due_date, status };
 
@@ -76,7 +81,7 @@ module.exports = {
     }
 
     const debt = await Debt.findOne({
-      where: { id: installment.debt_id, user_id: userId }
+      where: { id: installment.debt_id, user_id: userId },
     });
 
     if (!debt) {
@@ -86,5 +91,12 @@ module.exports = {
     await installment.destroy();
 
     return true;
-  }
+  },
+
+  async getAllFromUser(userId) {
+    return Installment.findAll({
+      where: { user_id: userId },
+      order: [["due_date", "ASC"]],
+    });
+  },
 };

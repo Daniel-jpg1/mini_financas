@@ -1,66 +1,123 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 function ColumnChart() {
-  const [installment, setInstallment] = useState([]);
-  const maxValue = 10000;
-  let leftSteps = 5;
-  let labels = [];
-  const totalAmounts = installment.map((item) => item.installmentAmount);
-  const months = [
-    { month: "Jan", received: 500, feitas: 400, installments: totalAmounts },
-    { month: "Fev", received: 500, feitas: 400, debts: 300 },
-    { month: "Mar", received: 500, feitas: 400, debts: 300 },
-    { month: "Abr", received: 500, feitas: 400, debts: 300 },
-    { month: "Mai", received: 500, feitas: 400, debts: 300 },
-    { month: "Jun", received: 500, feitas: 400, debts: 300 },
-    { month: "Jul", received: 500, feitas: 400, debts: 300 },
-    { month: "Ago", received: 500, feitas: 400, debts: 300 },
-    { month: "Set", received: 500, feitas: 400, debts: 300 },
-    { month: "Out", received: 500, feitas: 400, debts: 300 },
-    { month: "Nov", received: 500, feitas: 400, debts: 300 },
-    { month: "Dez", received: 500, feitas: 400, debts: 300 },
-  ];
-
-  for (let i = 0; i <= leftSteps; i++) {
-    labels.push(Math.round((maxValue / leftSteps) * i));
-  }
+  const [allInstallments, setAllInstallments] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    async function fetchInstallments() {
-      try {
-        const token = localStorage.getItem("token");
+    async function fetchAllInstallments() {
+      if (!token) return;
 
-        const response = await fetch("http://localhost:3000/api/installments", {
+      try {
+        const response = await fetch(`http://localhost:3000/api/installments`, {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          console.log(data.error);
-          return;
+        if (response.ok) {
+          const data = await response.json();
+          console.log("DADOS RECEBIDOS:", data);
+          setAllInstallments(Array.isArray(data) ? data : []);
+        } else {
+          const errorData = await response.json();
+          console.error("ERRO DO SERVIDOR:", errorData);
         }
-
-        setInstallment(data);
       } catch (error) {
-        console.error("Erro ao mostrar dados", error);
+        console.error("ERRO DE REDE:", error);
       }
     }
 
-    fetchInstallments();
-  }, []);
+    fetchAllInstallments();
+  }, [token]);
+
+  const chartData = useMemo(() => {
+    const monthsNames = [
+      "Jan",
+      "Fev",
+      "Mar",
+      "Abr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Set",
+      "Out",
+      "Nov",
+      "Dez",
+    ];
+    const initialMonths = monthsNames.map((name) => ({
+      month: name,
+      total: 0,
+    }));
+
+    allInstallments.forEach((item) => {
+      const date = new Date(item.due_date);
+      const monthIndex = date.getUTCMonth();
+      if (initialMonths[monthIndex]) {
+        initialMonths[monthIndex].total += Number(item.amount) || 0;
+      }
+    });
+
+    return initialMonths;
+  }, [allInstallments]);
+
+  const maxVal = useMemo(() => {
+    const highest = Math.max(...chartData.map((d) => d.total));
+    return highest > 0 ? highest : 1000;
+  }, [chartData]);
 
   return (
-    <section className="columnChart">
-      {months.map((month) => {
+    <section
+      className="columnChart"
+      style={{
+        display: "flex",
+        alignItems: "flex-end",
+        height: "250px",
+        gap: "8px",
+        padding: "15px",
+      }}
+    >
+      {chartData.map((data, index) => {
+        const barHeight = (data.total / maxVal) * 100;
+
         return (
-          <h1 key={month.month}>
-            {month.month} {month.installments}
-          </h1>
+          <div
+            key={index}
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "flex-end",
+                width: "100%",
+              }}
+            >
+              <div
+                style={{
+                  width: "20%",
+                  height: `${barHeight}%`,
+                  backgroundColor: "#4CAF50",
+                  borderRadius: "4px 4px 0 0",
+                  transition: "height 0.5s ease",
+                }}
+              />
+            </div>
+            <span style={{ fontSize: "11px", marginTop: "8px" }}>
+              {data.month}
+            </span>
+            <span style={{ fontSize: "9px", color: "#666" }}>
+              {data.total > 0 ? `R$${Math.round(data.total)}` : ""}
+            </span>
+          </div>
         );
       })}
     </section>

@@ -5,44 +5,48 @@ const Installment = sequelize.define("Installment", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
+  },
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   debt_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   account_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   installment_number: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   amount: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false
+    allowNull: false,
   },
   due_date: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: false,
   },
   status: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
-    allowNull: false
+    allowNull: false,
   },
   paid_date: {
     type: DataTypes.DATE,
-    allowNull: true
+    allowNull: true,
   },
-    description: {
-    type: DataTypes.TEXT
+  description: {
+    type: DataTypes.TEXT,
   },
-    transaction_date: {
+  transaction_date: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
-  }
+    defaultValue: DataTypes.NOW,
+  },
 });
 
 module.exports = Installment;
