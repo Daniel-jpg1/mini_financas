@@ -2,7 +2,6 @@ const { UniqueConstraintError, ValidationError } = require("sequelize");
 const accountService = require("../services/accountService");
 
 module.exports = {
-
   async create(req, res) {
     try {
       // Verifica autenticação
@@ -26,38 +25,38 @@ module.exports = {
       }
 
       if (Number.isNaN(parsedBalance)) {
-        return res.status(400).json({ error: "Saldo deve ser um número válido" });
+        return res
+          .status(400)
+          .json({ error: "Saldo deve ser um número válido" });
       }
 
       const account = await accountService.create({
         userId,
         name: name.trim(),
-        balance: parsedBalance
+        balance: parsedBalance,
       });
 
       return res.status(201).json(account);
-
     } catch (err) {
-
       console.error("ACCOUNT CREATE ERROR:", err);
 
-      // Conta duplicada 
+      // Conta duplicada
       if (err instanceof UniqueConstraintError) {
         return res.status(409).json({
-          error: "Você já tem uma conta com esse nome."
+          error: "Você já tem uma conta com esse nome.",
         });
       }
 
       // Erro de validação do Sequelize
       if (err instanceof ValidationError) {
         return res.status(400).json({
-          error: err.errors?.[0]?.message || "Dados inválidos."
+          error: err.errors?.[0]?.message || "Dados inválidos.",
         });
       }
 
       // Erro inesperado
       return res.status(500).json({
-        error: "Erro interno ao criar conta."
+        error: "Erro interno ao criar conta.",
       });
     }
   },
@@ -72,7 +71,6 @@ module.exports = {
       const accounts = await accountService.getAll(userId);
 
       return res.json(accounts);
-
     } catch (err) {
       console.error("ACCOUNT INDEX ERROR:", err);
       return res.status(500).json({ error: "Erro interno ao listar contas." });
@@ -92,24 +90,24 @@ module.exports = {
       const updated = await accountService.update(userId, id, updates);
 
       return res.json(updated);
-
     } catch (err) {
-
       console.error("ACCOUNT UPDATE ERROR:", err);
 
       if (err instanceof UniqueConstraintError) {
         return res.status(409).json({
-          error: "Você já tem uma conta com esse nome."
+          error: "Você já tem uma conta com esse nome.",
         });
       }
 
       if (err instanceof ValidationError) {
         return res.status(400).json({
-          error: err.errors?.[0]?.message || "Dados inválidos."
+          error: err.errors?.[0]?.message || "Dados inválidos.",
         });
       }
 
-      return res.status(500).json({ error: "Erro interno ao atualizar conta." });
+      return res
+        .status(500)
+        .json({ error: "Erro interno ao atualizar conta." });
     }
   },
 
@@ -125,10 +123,9 @@ module.exports = {
       await accountService.delete(userId, id);
 
       return res.json({ message: "Conta deletada com sucesso" });
-
     } catch (err) {
       console.error("ACCOUNT DELETE ERROR:", err);
       return res.status(500).json({ error: "Erro interno ao deletar conta." });
     }
-  }
+  },
 };

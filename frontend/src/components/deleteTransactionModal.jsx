@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function DeleteDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
+function DeleteTransactionModal({ isOpen, onClose, debts, onDebtUpdated }) {
   const [selectedAccountId, setSelectedAccountId] = useState("");
   const [title, setTitle] = useState("");
   const [total_amount, setTotal] = useState("");
@@ -97,4 +97,4 @@ function DeleteDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
   );
 }
 
-export default DeleteDebtModal;
+export default DeleteTransactionModal;

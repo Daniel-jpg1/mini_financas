@@ -1,11 +1,18 @@
 import { useState } from "react";
 
-function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
+function AddTransactionModal({
+  isOpen,
+  onClose,
+  onTransactionCreated,
+  accounts = [],
+}) {
   const [selectedAccountId, setSelectedAccountId] = useState("");
-  const [title, setTitle] = useState("");
-  const [total_amount, setTotal] = useState("");
+  const [type, setType] = useState("");
+  const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
+  const [direction, setDirection] = useState("");
+  const [category_id, setCategory] = useState("");
+  const [transaction_date, setDate] = useState("");
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -24,16 +31,18 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
       const token = localStorage.getItem("token");
 
       const payload = {
-        title,
-        total_amount: Number(total_amount),
+        amount: Number(amount),
         description,
-        accountId: accountIdNumber,
-        status,
+        account_id: accountIdNumber,
+        type,
+        direction,
+        category_id,
+        transaction_date,
       };
 
       console.log("payload enviado:", payload);
 
-      const response = await fetch("http://localhost:3000/api/debts", {
+      const response = await fetch("http://localhost:3000/api/transactions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,18 +58,20 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
         return;
       }
 
-      console.log("Dívida criada com sucesso:", data);
+      console.log("Transação criada com sucesso:", data);
 
-      await onDebtCreated();
+      await onTransactionCreated();
 
       setSelectedAccountId("");
-      setTitle("");
-      setTotal("");
+      setType("");
+      setAmount("");
       setDescription("");
-      setStatus("");
+      setDirection("");
+      setCategory("");
+      setDate("");
       onClose();
     } catch (error) {
-      console.error("Erro ao criar dívida:", error);
+      console.error("Erro ao criar transação:", error);
     }
   }
 
@@ -71,7 +82,7 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
   return (
     <section className="modalOverlay">
       <section className="modalContent">
-        <h2>Adicionar dívida</h2>
+        <h2>Adicionar Transação</h2>
 
         <form onSubmit={handleSubmit}>
           <select
@@ -86,28 +97,40 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
               </option>
             ))}
           </select>
-
-          <input
-            type="text"
-            placeholder="Nome da dívida"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-
           <input
             type="number"
-            placeholder="Valor da dívida"
-            value={total_amount}
-            onChange={(e) => setTotal(e.target.value)}
+            placeholder="Valor da Transação"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
           />
+          <select value={type} onChange={(e) => setType(e.target.value)}>
+            <option>Forma de pagamento</option>
+            <option>Pix</option>
+            <option>Crédito</option>
+            <option>Debito</option>
+            <option>Dinheiro</option>
+          </select>
 
+          <select
+            value={direction}
+            onChange={(e) => setDirection(e.target.value)}
+          >
+            <option>Pagando ou recebendo</option>
+            <option>Receber</option>
+            <option>Pagar</option>
+          </select>
           <input
             type="text"
             placeholder="Descrição"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-
+          <input
+            type="date"
+            placeholder="Data da transação"
+            value={transaction_date}
+            onChange={(e) => setDate(e.target.value)}
+          />
           <section className="modalButtons">
             <button type="submit">Salvar</button>
             <button type="button" onClick={onClose}>
@@ -120,4 +143,4 @@ function AddDebtModal({ isOpen, onClose, onDebtCreated, accounts = [] }) {
   );
 }
 
-export default AddDebtModal;
+export default AddTransactionModal;

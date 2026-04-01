@@ -1,18 +1,27 @@
 import { useState } from "react";
 
-function EditDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
-  const [selectedAccountId, setSelectedInstallmentId] = useState("");
-  const [title, setTitle] = useState("");
-  const [total_amount, setTotal] = useState("");
+function EditTransactionModal({
+  isOpen,
+  onClose,
+  transactions,
+  onTransactionUpdated,
+}) {
+  const [transaction, setSelectedInstallmentId] = useState("");
+  const [type, setType] = useState("");
+  const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
+  const [direction, setDirection] = useState("");
+  const [transaction_date, setDate] = useState("");
+  const [category_id, setCategory] = useState("");
 
   function handleClose() {
     setSelectedInstallmentId("");
-    setTitle("");
-    setTotal("");
+    setType("");
+    setAmount("");
     setDescription("");
-    setStatus("");
+    setDirection("");
+    setCategory("");
+    setDate("");
     onClose();
   }
 
@@ -20,26 +29,26 @@ function EditDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
     const accountId = event.target.value;
     setSelectedInstallmentId(accountId);
 
-    const selectedDebt = debts.find(
-      (account) => String(account.id) === accountId,
+    const selectedDebt = transactions.find(
+      (transaction) => String(transaction.id) === accountId,
     );
 
     if (selectedDebt) {
-      setTitle(selectedDebt.title);
-      setTotal(selectedDebt.total_amount);
+      setType(selectedDebt.type);
+      setAmount(selectedDebt.amount);
     }
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const accountIdNumber = Number(selectedAccountId);
+    const accountIdNumber = Number(transaction);
 
     try {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:3000/api/debts/${selectedAccountId}`,
+        `http://localhost:3000/api/transactions/${accountIdNumber}`,
         {
           method: "PUT",
           headers: {
@@ -47,11 +56,13 @@ function EditDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            title,
-            total_amount: Number(total_amount),
+            amount: Number(amount),
             description,
-            accountId: accountIdNumber,
-            status,
+            account_id: accountIdNumber,
+            type,
+            direction,
+            category_id,
+            transaction_date,
           }),
         },
       );
@@ -63,7 +74,7 @@ function EditDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
         return;
       }
 
-      await onDebtUpdated();
+      await onTransactionUpdated();
       handleClose();
     } catch (error) {
       console.error("Erro ao editar dívida:", error);
@@ -77,14 +88,14 @@ function EditDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
   return (
     <section className="modalOverlay">
       <section className="modalContent">
-        <h2>Editar dívida</h2>
+        <h2>Editar transação</h2>
 
         <form onSubmit={handleSubmit}>
-          <select value={selectedAccountId} onChange={handleSelectChange}>
-            <option value="">Selecione uma conta</option>
-            {debts.map((debt) => (
-              <option key={debt.id} value={debt.id}>
-                {debt.title}
+          <select value={transaction} onChange={handleSelectChange}>
+            <option value="">Selecione uma transação</option>
+            {transactions.map((transaction) => (
+              <option key={transaction.id} value={transaction.id}>
+                {transaction.type}
               </option>
             ))}
           </select>
@@ -92,15 +103,15 @@ function EditDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
           <input
             type="text"
             placeholder="Nome da dívida"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={type}
+            onChange={(e) => setType(e.target.value)}
           />
 
           <input
             type="number"
-            placeholder="Valor da dívida"
-            value={total_amount}
-            onChange={(e) => setTotal(e.target.value)}
+            placeholder="Valor da transação"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
           />
 
           <input
@@ -122,4 +133,4 @@ function EditDebtModal({ isOpen, onClose, debts, onDebtUpdated }) {
   );
 }
 
-export default EditDebtModal;
+export default EditTransactionModal;
